@@ -181,8 +181,8 @@ int32_t ais25ba_bus_mode_set(const stmdev_ctx_t *ctx,
     tdm_ctrl_reg.data_valid = val->tdm.clk_pol;
     tdm_ctrl_reg.delayed = val->tdm.clk_edge;
     tdm_ctrl_reg.wclk_fq = val->tdm.mapping;
-    tdm_cmax_h.tdm_cmax = (uint8_t)(val->tdm.cmax / 256U);
-    tdm_cmax_l.tdm_cmax = (uint8_t)(val->tdm.cmax - tdm_cmax_h.tdm_cmax);
+    tdm_cmax_h.tdm_cmax = (uint8_t)((val->tdm.cmax >> 8) & 0x0F);
+    tdm_cmax_l.tdm_cmax = (uint8_t)(val->tdm.cmax & 0xFF);
   }
 
   if (ret == 0)
@@ -233,7 +233,7 @@ int32_t ais25ba_bus_mode_get(const stmdev_ctx_t *ctx,
     val->tdm.en = ~tdm_ctrl_reg.tdm_pd;
     val->tdm.clk_pol = tdm_ctrl_reg.data_valid;
     val->tdm.clk_edge = tdm_ctrl_reg.delayed;
-    val->tdm.mapping = tdm_ctrl_reg.wclk_fq;
+    val->tdm.mapping = tdm_ctrl_reg.mapping;
     val->tdm.cmax = (uint16_t)(
       ((uint16_t)tdm_cmax_h.tdm_cmax << 8) |
       (uint16_t)tdm_cmax_l.tdm_cmax
@@ -405,7 +405,7 @@ int32_t ais25ba_self_test_set(const stmdev_ctx_t *ctx, uint8_t val)
 
   if (ret == 0)
   {
-    test_reg.st = val;
+    test_reg.st = (uint8_t)((uint8_t)val & 0x01);
     ret = ais25ba_write_reg(ctx, AIS25BA_TEST_REG, (uint8_t *)&test_reg, 1);
   }
 
