@@ -339,7 +339,7 @@ typedef struct
     uint8_t clk_pol  : 1; /* data valid on 0=rise/1=falling edge of BCLK */
     uint8_t clk_edge : 1; /* data on 0=first / 1=second valid edge of BCLK */
     uint8_t mapping  : 1; /* xl data in 0=slot0-1-2 / 1=slot4-5-6 */
-    uint16_t cmax    : 1; /* BCLK in a WCLK (unused if odr=_XL_HW_SEL) */
+    uint16_t cmax       ; /* BCLK in a WCLK (unused if odr=_XL_HW_SEL) */
   } tdm;
 } ais25ba_bus_mode_t;
 int32_t ais25ba_bus_mode_set(const stmdev_ctx_t *ctx,

@@ -234,8 +234,10 @@ int32_t ais25ba_bus_mode_get(const stmdev_ctx_t *ctx,
     val->tdm.clk_pol = tdm_ctrl_reg.data_valid;
     val->tdm.clk_edge = tdm_ctrl_reg.delayed;
     val->tdm.mapping = tdm_ctrl_reg.wclk_fq;
-    val->tdm.cmax = tdm_cmax_h.tdm_cmax * 256U;
-    val->tdm.cmax += tdm_cmax_l.tdm_cmax;
+    val->tdm.cmax = (uint16_t)(
+      ((uint16_t)tdm_cmax_h.tdm_cmax << 8) |
+      (uint16_t)tdm_cmax_l.tdm_cmax
+    );
   }
 
   return ret;
